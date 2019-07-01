@@ -1,35 +1,35 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/index/home/home",
+    "pages/home/home",
     "pages/profile/profile"
   ],
   "window": {
-   "navigationBarBackgroundColor": "bcc0c9",
+    "navigationBarBackgroundColor": "bcc0c9",
     "navigationBarTextStyle": "white",
-    "navigationBarTitleText": "签到",
+    "navigationBarTitleText": "课堂考勤系统",
     "backgroundColor": "#bcc0c9",
     "backgroundTextStyle": "light",
     "enablePullDownRefresh": false
   },
   "tabBar": {
-      "color": "#999",
-      "selectedColor": "#444",
-      "backgroundColor": "#fff",
-      "borderStyle": "black",
-      "list": [{
-              "pagePath": "pages/index/home/home",
-              "text": "首页",
-              "iconPath": "pages/asset/home.png",
-              "selectedIconPath": "pages/asset/home.png"
-          },
-          {
-              "pagePath": "pages/profile/profile",
-              "text": "我的",
-              "iconPath": "pages/asset/user.png",
-              "selectedIconPath": "pages/asset/user.png"
-          }
-      ]
+    "color": "#999",
+    "selectedColor": "#444",
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "pages/asset/home.png",
+        "selectedIconPath": "pages/asset/home.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "pages/asset/user.png",
+        "selectedIconPath": "pages/asset/user.png"
+      }
+    ]
   },
   "permission": {
     "scope.userLocation": {

@@ -7,20 +7,50 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+function getWechatId(jscode) {
+    const appid = 'wx32879baf70eb1e28';
+    const secret = '8216b172029a406b3e0becc346487ceb';
+    let wechat_id = null;
+    request('https://api.weixin.qq.com/sns/jscode2session?appid=' + appid + '&secret=' + secret + '&js_code=' + jscode + '&grant_type=authorization_code', function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+            wechat_id = body.openid;
+        }
+    })
+    return wechat_id;
+}
+
+app.post('/login', (req, res) => {
+    if (!req.body.jscode) {
+        res.status(400);
+        res.send('invalid data');
+        return;
+    }
+    let wechat_id = getWechatId(req.body.jscode);
+    let sql = "SELECT * FROM `user` WHERE `wechat_id` = '" + wechat_id + "'";
+    connection.query(sql, function (error, result) {
+        if (error) {
+            res.status(500);
+            res.send(error);
+        } else if (result.length === 0) {
+            res.status(404);
+            res.send('not binded');
+        } else {
+            res.send({
+                user_id: result[0].user_id,
+                user_name: result[0].user_name,
+                role: result[0].role
+            });
+        }
+    })
+})
+
 app.post('/bind', (req, res) => {
     if (!req.body.user_id || !req.body.jscode || !req.body.role) {
         res.status(400);
         res.send('invalid data');
         return;
     }
-    const appid = 'wx32879baf70eb1e28';
-    const secret = '8216b172029a406b3e0becc346487ceb';
-    let wechat_id = null;
-    request('https://api.weixin.qq.com/sns/jscode2session?appid=' + appid + '&secret=' + secret + '&js_code=' + req.body.jscode + '&grant_type=authorization_code', function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            wechat_id = body.openid;
-        }
-    })
+    let wechat_id = getWechatId(req.body.jscode);
     if (!wechat_id) {
         res.status(500);
         res.send('failed');
@@ -70,7 +100,26 @@ app.get('/myCourse', (req, res) => {
             }
         })
     } else if (req.query.role === 'student') {
-        res.send('ok'); //视图
+        let sql = "SELECT * FROM `courseSelect` WHERE `student_id` = '" + req.query.user_id + "'";
+        connection.query(sql, function (error, result) {
+            if (error) {
+                res.status(500);
+                res.send(error);
+            } else if (result.length === 0) {
+                res.status(404);
+                res.send('no student\'s user_id = ' + req.query.user_id);
+            } else {
+                sql = "SELECT * FROM `course` WHERE `course_id` = '" + result[0].course_id + "'";
+                connection.query(sql, function (error, result) {
+                    if (error) {
+                        res.status(500);
+                        res.send(error);
+                    } else {
+                        res.send(result);
+                    }
+                })
+            }
+        })
     }
 })
 

@@ -8,12 +8,12 @@ Page({
     roleLabel: '',
     items: [
       {
-        name: 'teacher', 
+        name: 'teacher',
         value: '教师',
         checked: false
       },
       {
-        name: 'student', 
+        name: 'student',
         value: '学生',
         checked: false
       }
@@ -35,14 +35,14 @@ Page({
   /**
    * 点击完善信息button
    */
-  _handleInfo () {
+  _handleInfo() {
     this.Modal.showModal();
   },
 
   /**
    * 点击radio
    */
-  _radioChange (e) {
+  _radioChange(e) {
     const { items } = this.data;
     const value = e.detail.value;
     // items.forEach(element => {
@@ -53,7 +53,7 @@ Page({
     // });
   },
 
-  _handleSaveNumber (e) {
+  _handleSaveNumber(e) {
     const value = e.detail.value;
   }
 })
