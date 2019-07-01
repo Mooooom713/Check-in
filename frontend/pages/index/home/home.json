@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "card": "/component/Card/Card",
+    "dialog": "/component/Dialog/Dialog"
+  },
+  "navigationBarTitleText": "签到广场",
+  "enablePullDownRefresh": true
+}
