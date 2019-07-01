@@ -1,0 +1,17 @@
+<view class="card-wrap">
+  <view class="card-container">
+    <view class="class-wrap">
+      <text class="label">课程名：</text>
+      <text class="text">{{className}}</text>
+    </view>
+    <view class="time-wrap">
+      <text class="label">上课时间：</text>
+      <text class="text">{{time}}</text>
+    </view>
+    <view wx:if="{{isShow}}" class="number-wrap">
+      <text class="label">上课人数：</text>
+      <text class="text">{{number}}</text>
+    </view>
+    <button class="btn" catchtap="_handleSignIn">{{buttonText}}</button>
+  </view>
+</view>

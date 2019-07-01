@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "dialog": "/component/Dialog/Dialog"
+  },
+  "navigationBarTitleText": "个人中心",
+  "enablePullDownRefresh": true
+}

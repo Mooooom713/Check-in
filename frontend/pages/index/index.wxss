@@ -18,4 +18,5 @@
 
 .usermotto {
   margin-top: 200px;
+  color: #543fbe
 }

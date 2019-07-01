@@ -1,0 +1,48 @@
+<view class="user-info-wrap">
+  <view class="img-wrap">
+    <image class="img" src="{{userInfo.avatarUrl}}"/>
+  </view>
+  <view class="text-wrap">
+    <text class="text">
+      {{userInfo.nickName}}
+    </text>
+  </view>
+</view>
+
+<view wx:if="{{hasNumber}}">
+  <view>
+    <label>角色:</label>
+    <text class=""></text>
+  </view>
+  <view class="">
+    <label>{{roleLabel}}:</label>
+    <text class=""></text>
+  </view>
+  <button>登出</button>
+</view>
+
+<button wx:else class="btn" bindtap="_handleInfo">完善信息</button>
+
+<!-- component -->
+<dialog 
+    class="modal" 
+    title='完善信息' 
+    cancelText='取消' 
+    confirmText='提交' 
+    bind:cancelEvent='_cancelEvent' 
+    bind:confirmEvent='_confirmEvent'>
+  <view class="modal-body">
+    <view class="redio-wrap">
+      <label >选择角色：</label>
+      <radio-group class="radio-group" bindchange="_radioChange">
+        <label wx:key="{{index}}" wx:for="{{items}}">
+          <radio value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}
+        </label>
+      </radio-group>
+    </view>
+    <view class="input-wrap">
+      <label >输入学号或工号：</label>
+      <input class="input" bindblur="_handleSaveNumber" />
+    </view>
+  </view>
+</dialog>

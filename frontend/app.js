@@ -5,11 +5,27 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-
+    var that = this;
+    var selfInfo = {
+      appid: 'wx32879baf70eb1e28',
+      appsecret: '8216b172029a406b3e0becc346487ceb'
+    }
     // 登录
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        var url = 'https://zwtbis.applinzi.com/bind'
+        wx.request({  
+          url: url,  
+          data: {},  
+          method: 'POST', 
+          success: function(res){  
+              console.log(res);
+          },
+          error: function(e){
+            console.log(e)
+          }  
+        });
       }
     })
     // 获取用户信息
