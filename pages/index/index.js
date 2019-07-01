@@ -4,16 +4,10 @@ const app = getApp()
 
 Page({
   data: {
-    motto: 'Hello World',
+    motto: '点击进入小程序',
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo')
-  },
-  //事件处理函数
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
   },
   onLoad: function () {
     if (app.globalData.userInfo) {
@@ -44,11 +38,24 @@ Page({
     }
   },
   getUserInfo: function(e) {
-    console.log(e)
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
+    })
+  },
+  navToHome () {
+    wx.switchTab({
+      url: './home/home',
+      success: function(res) {
+        console.log(res, 'ok')
+      },
+      fail: function(res) {
+        console.log(res, 'error')
+      },
+      complete: function(res) {
+        console.log(res, 'complete')
+      },
     })
   }
 })

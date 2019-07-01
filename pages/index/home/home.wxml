@@ -1,0 +1,18 @@
+<view class="home-container">
+  <card
+    bind:handleSignIn="_handleSignIn">
+  </card>
+</view>
+
+<!-- component -->
+<dialog 
+  class="modal" 
+  title='提示' 
+  cancelText='取消' 
+  confirmText='确定' 
+  bind:cancelEvent='_cancelEvent' 
+  bind:confirmEvent='_confirmEvent'>
+  <view class="modal-body">
+    <view>{{noteText}}</view>
+  </view>
+</dialog>

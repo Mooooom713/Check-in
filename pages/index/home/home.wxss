@@ -1,0 +1,7 @@
+page{
+  background: #dcdcdc;
+}
+
+.home-container {
+  width: 100%;
+}
