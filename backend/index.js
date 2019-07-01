@@ -53,6 +53,25 @@ app.post('/bind', (req, res) => {
     })
 })
 
-app.get('/myCourse?id')
+app.get('/myCourse', (req, res) => {
+    if (!req.query.user_id || (req.query.role !== 'teacher' && req.query.role !== 'student')) {
+        res.status(400);
+        res.send('invalid data');
+        return;
+    }
+    if (req.query.role === 'teacher') {
+        let sql = "SELECT * FROM `course` WHERE `teacher_id` = '" + req.query.user_id + "'";
+        connection.query(sql, function (error, result) {
+            if (error) {
+                res.status(500);
+                res.send(error);
+            } else {
+                res.send(result);
+            }
+        })
+    } else if (req.query.role === 'student') {
+        res.send('ok'); //视图
+    }
+})
 
 app.listen(process.env.PORT || 5050);
