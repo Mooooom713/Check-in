@@ -36,7 +36,14 @@ Page({
    * 点击完善信息button
    */
   _handleInfo() {
-    this.Modal.showModal();
+    if (app.globalData.code) {
+      this.Modal.showModal();
+    } else {
+      wx.showToast({
+        text: '微信登录失败',
+        icon: 'none'
+      })
+    }
   },
 
   /**

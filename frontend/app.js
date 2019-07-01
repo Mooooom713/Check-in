@@ -6,6 +6,7 @@ App({
     return new Promise(function (resolve, reject) {
       wx.login({
         success: res => {
+          that.globalData.code = res.code;
           wx.request({
             url: 'https://zwtbis.applinzi.com/login',
             data: JSON.stringify({
@@ -13,7 +14,7 @@ App({
             }),
             method: 'POST',
             success: res => {
-              if (res.statusCode === 500) {
+              if (res.statusCode === 500 || res.statusCode === 502) {
                 resolve('error');
               } else if (res.statusCode === 404) {
                 resolve('no');
@@ -36,6 +37,7 @@ App({
   },
 
   globalData: {
-    userInfo: null
+    userInfo: null,
+    code: null
   }
 })
