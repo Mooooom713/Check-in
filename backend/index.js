@@ -1,13 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const connection = require('../database');
+const connection = require('./database');
 const request = require('request');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.post('/', (req, res) => {
+app.post('/bind', (req, res) => {
     if (!req.body.user_id || !req.body.jscode || !req.body.role) {
         res.status(400);
         res.send('invalid data');
@@ -52,5 +52,7 @@ app.post('/', (req, res) => {
         }
     })
 })
+
+app.get('/myCourse?id')
 
 app.listen(process.env.PORT || 5050);
