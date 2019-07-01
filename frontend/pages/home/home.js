@@ -25,6 +25,7 @@ Page({
         that.setData({
           isShow: true
         })
+        app.globalData.userInfo = res
         wx.hideLoading();
       }
     }).catch(() => {

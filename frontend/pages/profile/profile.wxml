@@ -1,22 +1,16 @@
 <view class="user-info-wrap">
-  <view class="img-wrap">
-    <image class="img" src="{{userInfo.avatarUrl}}"/>
-  </view>
-  <view class="text-wrap">
-    <text class="text">
-      {{userInfo.nickName}}
-    </text>
-  </view>
+  <text>欢迎你，</text>
+  <text class="user-name">{{user_name}}</text>
 </view>
 
-<view wx:if="{{hasNumber}}">
-  <view>
+<view class="panel-wrap" wx:if="{{hasNumber}}">
+  <view class="role-wrap">
     <label>角色:</label>
-    <text class=""></text>
+    <text class="text">{{role}}</text>
   </view>
-  <view class="">
+  <view class="id-wrap">
     <label>{{roleLabel}}:</label>
-    <text class=""></text>
+    <text class="text">{{user_id}}</text>
   </view>
 </view>
 
@@ -41,7 +35,7 @@
     </view>
     <view class="input-wrap">
       <label >输入学号或工号：</label>
-      <input class="input" bindblur="_handleSaveNumber" />
+      <input class="input" value="{{postId}}" bindinput="_handleSaveNumber" />
     </view>
   </view>
 </dialog>

@@ -4,32 +4,45 @@ page {
 
 .user-info-wrap {
   width: 94%;
-  height: 7rem;
+  height: 6rem;
   margin: 3% 0 0 3%;
   background: #f3f3f3;
   border-radius: 5px;
+  text-align: center;
+  line-height: 6rem;
+}
+
+.panel-wrap {
+  width: 94%;
+  height: 8rem;
+  margin: 3% 0 0 3%;
+  background: #f3f3f3;
+  border-radius: 5px;
+}
+
+.role-wrap,
+.id-wrap {
+  padding-top: 20px;
   display: flex;
+  flex-direction: row;
 }
 
-.img-wrap,
-.text-wrap {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.panel-wrap label {
+  flex: 0 0 30%;
+  text-align: right;
 }
 
-.text {
-  margin-top: -18%;
+.text{
+  flex: 0 0 60%;
+  padding-left: 10px;
+  color: #543fbe;
 }
 
-.img {
-  width: 50%;
-  height: 56%;
-  border-radius: 50px;
+.user-name {
+  color: #543fbe;
+  font-size: 1.2rem;
 }
+
 
 .btn {
   background: #ff8830;
