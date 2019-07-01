@@ -13,14 +13,17 @@ App({
             }),
             method: 'POST',
             success: res => {
-              that.globalData.userInfo = res;
-              resolve(res);
+              if (res.statusCode === 500) {
+                resolve('error');
+              } else if (res.statusCode === 404) {
+                resolve('no');
+              } else {
+                resolve(res);
+              }
             },
-            fail: (error) => {
+            fail: error => {
               if (error.errMsg === 'request:fail ') {
                 resolve('error');
-              } else {
-                resolve('no');
               }
             }
           })
