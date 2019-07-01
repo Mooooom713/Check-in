@@ -2,10 +2,37 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const connection = require('./database');
 const request = require('request');
+const webSocket = require('ws');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+const wss = new webSocket.Server({
+    port: 5050
+});
+var clients = [];
+var teacherWs = null;
+
+wss.on('connection', function connection(ws) {
+    clients.push(ws);
+    // 断开连接
+    ws.on('close', function close() {
+        if (teacherWs && ws === teacherWs) {
+            teacherWs = null;
+        }
+        clients = clients.filter(function (item) {
+            return item !== ws;
+        })
+    });
+
+    // 接收消息
+    ws.on('message', function message(message) {
+        if (message === 'teacher') {
+            teacherWs = ws;
+        }
+    });
+});
 
 function getWechatId(jscode) {
     const appid = 'wx32879baf70eb1e28';
@@ -66,16 +93,18 @@ app.post('/bind', (req, res) => {
             res.send('no ' + req.body.role + '\'s user_id = ' + req.body.user_id);
         } else if (result[0].wechat_id === "") {
             sql = "UPDATE `user` SET `wechat_id `= '" + wechat_id + "' WHERE `user_id` = '" + req.body.user_id + "'";
-            connection.query(sql, function (error) {
+            connection.query(sql, function (error, result) {
                 if (error) {
                     res.status(500);
                     res.send(error);
                 } else {
-                    res.send('bind successfully');
+                    res.send({
+                        user_id: result[0].user_id,
+                        user_name: result[0].user_name,
+                        role: result[0].role
+                    });
                 }
             })
-        } else if (result[0].wechat_id === wechat_id) {
-            res.send('login successfully');
         } else {
             res.status(400);
             res.send('already binded');
