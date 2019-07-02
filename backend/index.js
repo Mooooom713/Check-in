@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const request = require('sync-request');
-// const webSocket = require('ws');
+const webSocket = require('ws');
 
 const mysql_config = {
     host: process.env.MYSQL_HOST,
@@ -26,7 +26,7 @@ function handleDisconnection() {
     });
 
     connection.on('error', function (err) {
-        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+        if (err.code === 'PROTOCOL_CONNECTION_LOST' || err.code === 'PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR') {
             handleDisconnection();
         } else {
             throw err;
@@ -34,33 +34,50 @@ function handleDisconnection() {
     });
 }
 
-handleDisconnection();
+// handleDisconnection();
 
-// const wss = new webSocket.Server({
-//     port: 5050
-// });
-// var clients = [];
-// var teacherWs = null;
+const wss = new webSocket.Server({
+    port: 2050
+});
+var clients = [];
+var teacherWs = null;
 
-// wss.on('connection', function connection(ws) {
-//     clients.push(ws);
-//     // 断开连接
-//     ws.on('close', function close() {
-//         if (teacherWs && ws === teacherWs) {
-//             teacherWs = null;
-//         }
-//         clients = clients.filter(function (item) {
-//             return item !== ws;
-//         })
-//     });
+var latitude = null;
+var longitude = null;
 
-//     // 接收消息
-//     ws.on('message', function message(message) {
-//         if (message === 'teacher') {
-//             teacherWs = ws;
-//         }
-//     });
-// });
+wss.on('connection', function connection(ws) {
+    clients.push(ws);
+
+    // 断开连接
+    ws.on('close', function close() {
+        if (teacherWs && ws === teacherWs) {
+            teacherWs = null;
+        }
+        clients = clients.filter(function (item) {
+            return item !== ws;
+        })
+    });
+
+    // 接收消息
+    ws.on('message', function message(message) {
+        ws.send(message);
+        // if (message.role === 'teacher') {
+        //     teacherWs = ws;
+        //     latitude = message.latitude;
+        //     longitude = message.longitude;
+        // } else if (message.role === 'student') {
+        //     // 判断经纬度是否在有限距离内 如果在则推送给老师
+        //     if (teacherWs) {
+        //         teacherWs.send({
+        //             user_id: message.user_id,
+        //             user_name: user_name
+        //         })
+        //     }
+        // } else {
+        //     ws.send('invalid data');
+        // }
+    });
+});
 
 var jscode = null;
 var openid = null;
