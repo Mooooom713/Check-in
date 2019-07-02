@@ -24,6 +24,25 @@ Page({
     postId: ''
   },
   onLoad: function () {
+
+  },
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+    this.Modal = this.selectComponent(".modal");
+  },
+
+  onShow: function () {
+    // if(app.globalData.userInfo){
+    //   const { role, user_id, user_name } = app.globalData.userInfo
+    //   this.setData({
+    //     role,
+    //     user_id,
+    //     user_name
+    //   })
+    // }
+
     if (app.globalData.userInfo) {
       const { role } = app.globalData.userInfo
       if (role === 'student') {
@@ -40,12 +59,6 @@ Page({
         })
       }
     }
-  },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-    this.Modal = this.selectComponent(".modal");
   },
 
   /**
@@ -110,7 +123,18 @@ Page({
             icon: 'none'
           })
         } else {
-          console.log(res); // 如果res !== failed to load user info 则成功返回用户信息
+          app.globalData.userInfo = res.data
+          const { role, user_id, user_name } = res.data
+          this.setData({
+            user_id,
+            user_name,
+            role,
+            postRole: '',
+            postId: '',
+            hasNumber: true,
+            roleLabel: role === 'teacher' ? '工号' : '学号'
+          })
+          this.Modal.hideModal()
         }
       },
       fail: (e) => {

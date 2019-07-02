@@ -3,7 +3,10 @@ const app = getApp();
 Page({
   data: {
     noteText: '',
-    isShow: false
+    isShow: false,
+    classItems: [],
+    cardIsShow: false,
+    cardButtonText: ''
   },
 
   onLoad: function () {
@@ -22,10 +25,8 @@ Page({
         wx.hideLoading();
       } else {
         // 已绑定，直接登录
-        that.setData({
-          isShow: true
-        })
-        app.globalData.userInfo = res
+        app.globalData.userInfo = res.data
+        this._getClassInfo(res.data)
         wx.hideLoading();
       }
     }).catch(() => {
@@ -41,12 +42,34 @@ Page({
   },
 
   onShow: function () {
-    if (this.data.isShow) {
-      console.log('请求一次');
+    console.log(app.globalData.userInfo)
+    if (app.globalData.userInfo) {
+     this._getClassInfo(app.globalData.userInfo)
     }
   },
 
+  _getClassInfo (data) {
+    const { user_id, role } = data
+    wx.request({
+      url:`https://zwtbis.applinzi.com/myCourse?user_id=${user_id}&role=${role}`,
+      method: 'GET',
+      success: (res) => {
+        console.log(res);
+        this.setData({
+          isShow: true,
+          classItems: res.data,
+          cardIsShow: role === 'teacher' ? true : false,
+          cardButtonText: role === 'teacher' ? '发起签到' : '确认签到'
+        })
+      },
+      fail: (e) => {
+        console.log(e)
+      }
+    })
+  },
+
   _handleSignIn() {
+    const { user_id, role } = this.data
     wx.getLocation({
       success: function (res) {
         const latitude = res.latitude
