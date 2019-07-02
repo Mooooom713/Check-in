@@ -24,15 +24,15 @@ Page({
     postId: ''
   },
   onLoad: function () {
-    if(app.globalData.userInfo){
+    if (app.globalData.userInfo) {
       const { role } = app.globalData.userInfo
-      if(role === 'student'){
+      if (role === 'student') {
         this.setData({
           hasNumber: true,
           roleLabel: '学号',
           ...app.globalData.userInfo
         })
-      }else{
+      } else {
         this.setData({
           hasNumber: true,
           roleLabel: '工号',
@@ -80,7 +80,7 @@ Page({
     })
   },
 
-  _cancelEvent () {
+  _cancelEvent() {
     this.Modal.hideModal()
     this.setData({
       postRole: '',
@@ -88,9 +88,8 @@ Page({
     })
   },
 
-  _confirmEvent () {
-    const { postRole, postId } = this.data
-    console.log(postRole, postId)
+  _confirmEvent() {
+    const { postRole, postId } = this.data;
     wx.request({
       url: 'https://zwtbis.applinzi.com/bind',
       data: JSON.stringify({
@@ -100,11 +99,18 @@ Page({
       }),
       method: 'POST',
       success: (res) => {
-        if(res.statusCode >= 500){
+        if (res.statusCode >= 500) {
           wx.showToast({
             title: '服务器开小差了~',
             icon: 'none'
           })
+        } else if (res.statusCode === 404) {
+          wx.showToast({
+            title: '该账号不存在',
+            icon: 'none'
+          })
+        } else {
+          console.log(res); // 如果res !== failed to load user info 则成功返回用户信息
         }
       },
       fail: (e) => {
