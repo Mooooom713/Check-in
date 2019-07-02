@@ -34,16 +34,16 @@ function handleDisconnection() {
     });
 }
 
-// handleDisconnection();
+handleDisconnection();
 
 const wss = new webSocket.Server({
-    port: 2050
+    port: 5050
 });
 var clients = [];
 var teacherWs = null;
-
 var latitude = null;
 var longitude = null;
+var course_id = null;
 
 wss.on('connection', function connection(ws) {
     clients.push(ws);
@@ -60,22 +60,27 @@ wss.on('connection', function connection(ws) {
 
     // 接收消息
     ws.on('message', function message(message) {
-        ws.send(message);
-        // if (message.role === 'teacher') {
-        //     teacherWs = ws;
-        //     latitude = message.latitude;
-        //     longitude = message.longitude;
-        // } else if (message.role === 'student') {
-        //     // 判断经纬度是否在有限距离内 如果在则推送给老师
-        //     if (teacherWs) {
-        //         teacherWs.send({
-        //             user_id: message.user_id,
-        //             user_name: user_name
-        //         })
-        //     }
-        // } else {
-        //     ws.send('invalid data');
-        // }
+        message = JSON.parse(message);
+        if (message.role === 'teacher' && message.course_id) {
+            teacherWs = ws;
+            course_id = message.course_id;
+            latitude = message.latitude;
+            longitude = message.longitude;
+        } else if (message.role === 'student') {
+            if (!course_id || message.course_id !== course_id) {
+                ws.send('no');
+                return;
+            }
+            // 判断经纬度是否在有限距离内 如果在则推送给老师
+            if (teacherWs) {
+                teacherWs.send(JSON.stringify({
+                    user_id: message.user_id,
+                    user_name: user_name
+                }))
+            }
+        } else {
+            ws.send('invalid data');
+        }
     });
 });
 
