@@ -42,7 +42,6 @@ Page({
   },
 
   onShow: function () {
-    console.log(app.globalData.userInfo)
     if (app.globalData.userInfo) {
      this._getClassInfo(app.globalData.userInfo)
     }
@@ -54,7 +53,6 @@ Page({
       url:`https://zwtbis.applinzi.com/myCourse?user_id=${user_id}&role=${role}`,
       method: 'GET',
       success: (res) => {
-        console.log(res);
         this.setData({
           isShow: true,
           classItems: res.data,

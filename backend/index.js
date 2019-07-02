@@ -1,12 +1,40 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const connection = require('./database');
+const mysql = require('mysql');
 const request = require('sync-request');
 // const webSocket = require('ws');
+
+const mysql_config = {
+    host: process.env.MYSQL_HOST,
+    port: process.env.MYSQL_PORT,
+    user: process.env.ACCESSKEY,
+    password: process.env.SECRETKEY,
+    database: 'app_' + process.env.APPNAME
+}
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+var connection;
+function handleDisconnection() {
+    connection = mysql.createConnection(mysql_config);
+    connection.connect(function (err) {
+        if (err) {
+            setTimeout(handleDisconnection, 2000);
+        }
+    });
+
+    connection.on('error', function (err) {
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+            handleDisconnection();
+        } else {
+            throw err;
+        }
+    });
+}
+
+handleDisconnection();
 
 // const wss = new webSocket.Server({
 //     port: 5050
