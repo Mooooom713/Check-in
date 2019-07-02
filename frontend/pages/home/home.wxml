@@ -1,9 +1,16 @@
-<view class="home-container" hidden="{{!isShow}}">
+<view class="home-container" wx:if="{{isShow}}">
   <card
+    wx:for="{{classItems}}"
+    wx:key="{{index}}"
+    className="{{item.course_name}}"
+    time="{{item.time}}"
+    isShow="{{cardIsShow}}"
+    number="{{item.peple}}"
+    buttonText="{{cardButtonText}}"
     bind:handleSignIn="_handleSignIn">
   </card>
 </view>
-<text class="hint" hidden="{{isShow}}">请先前往个人中心绑定学号或者工号</text>
+<text class="hint" wx:else>请先前往个人中心绑定学号或者工号</text>
 
 <!-- component -->
 <dialog 

@@ -26,6 +26,7 @@ App({
               if (error.errMsg === 'request:fail ') {
                 resolve('error');
               }
+              console.log(error)
             }
           })
         },
