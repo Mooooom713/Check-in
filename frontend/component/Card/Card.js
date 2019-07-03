@@ -10,9 +10,14 @@ Component({
       value: '毛概'
     },
 
+    classId: {
+      type: String,
+      value:  '0001'
+    },
+
     time: {
       type: String,
-      value: '周三  上午 9:00'
+      value: '周三 7-8'
     },
 
     isShow: {
@@ -50,7 +55,10 @@ Component({
    */
   methods: {
     _handleSignIn () {
-      this.triggerEvent('handleSignIn')
+      this.triggerEvent('handleSignIn', {
+        classId: this.data.classId,
+        number: this.data.number
+      })
     }
 
   }

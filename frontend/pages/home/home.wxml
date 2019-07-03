@@ -3,6 +3,7 @@
     wx:for="{{classItems}}"
     wx:key="{{index}}"
     className="{{item.course_name}}"
+    classId="{{item.course_id}}"
     time="{{item.time}}"
     isShow="{{cardIsShow}}"
     number="{{item.peple}}"
@@ -21,6 +22,6 @@
   bind:cancelEvent='_cancelEvent' 
   bind:confirmEvent='_confirmEvent'>
   <view class="modal-body">
-    <view>{{noteText}}</view>
+    <view class="note-text">{{noteText}}</view>
   </view>
 </dialog>

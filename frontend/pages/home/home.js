@@ -42,7 +42,6 @@ Page({
   },
 
   onShow: function () {
-    console.log(app.globalData.userInfo)
     if (app.globalData.userInfo) {
      this._getClassInfo(app.globalData.userInfo)
     }
@@ -68,20 +67,25 @@ Page({
     })
   },
 
-  _handleSignIn() {
-    const { user_id, role } = this.data
-    wx.getLocation({
-      success: function (res) {
-        const latitude = res.latitude
-        const longitude = res.longitude
-        console.log(latitude, longitude)
-      },
-      fail: function (e) {
-        wx.showToast({
-          title: '无法获取位置信息',
-          icon: 'none'
-        })
-      }
+  _handleSignIn(e) {
+    const {  role } =app.globalData.userInfo
+    app.globalData.classInfo = e.detail
+    console.log(app.globalData)
+    if(role === 'teacher'){
+      this.setData({
+        noteText: '确认上传位置信息？'
+      })
+      this.Modal.showModal()
+    }
+  },
+
+  _cancelEvent () {
+    this.Modal.hideModal()
+  },
+
+  _confirmEvent () {
+    wx.navigateTo({
+      url: '/pages/home/checkin/checkin'
     })
   }
 })
