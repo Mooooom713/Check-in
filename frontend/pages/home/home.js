@@ -81,7 +81,7 @@ Page({
 
   handleStudentSignIn(role) {
     const { user_id, user_name } = app.globalData.userInfo;
-    const { course_id } = app.globalData.classInfo;
+    const course_id = app.globalData.classInfo.classId;
     wx.getLocation({
       success: (res) => {
         const latitude = res.latitude
@@ -133,7 +133,7 @@ Page({
           title: '你已经签到过了',
           icon: 'none'
         })
-      } else {
+      } else if (res.data === "ok") {
         wx.showToast({
           title: '签到成功',
           icon: 'success'

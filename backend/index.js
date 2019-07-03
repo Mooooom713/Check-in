@@ -88,8 +88,9 @@ wss.on('connection', function connection(ws) {
             if (teacherWs) {
                 teacherWs.send(JSON.stringify({
                     user_id: message.user_id,
-                    user_name: user_name
+                    user_name: message.user_name
                 }))
+                ws.send("ok");
                 successor.push(message.user_id);
             }
         } else {
