@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const request = require('sync-request');
@@ -13,6 +14,7 @@ const mysql_config = {
 }
 
 const app = express();
+const server = http.createServer(app);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -36,9 +38,7 @@ function handleDisconnection() {
 
 handleDisconnection();
 
-const wss = new webSocket.Server({
-    port: 5050
-});
+const wss = new webSocket.Server({ server });
 var clients = [];
 var teacherWs = null;
 var latitude = null;
@@ -217,4 +217,4 @@ app.get('/myCourse', (req, res) => {
     }
 })
 
-app.listen(process.env.PORT || 5050);
+server.listen(process.env.PORT || 5050);
