@@ -4,7 +4,8 @@ Page({
   data: {
     time: 60,
     people: 0,
-    signPeople: 0
+    signPeople: 0,
+    signItems: []
   },
 
   onLoad: function () {
@@ -77,6 +78,7 @@ Page({
   },
 
   _getLocationInfo (latitude, longitude) {
+    var that = this
     wx.connectSocket({
       url: 'wss://zwtbis.applinzi.com',
       header:{
@@ -98,6 +100,7 @@ Page({
         }),
         success: function (res) {
           console.log("数据已发给服务器")
+          wx.onSocketMessage(that._handleMessage.bind(that))
         }
       })
     })
@@ -105,9 +108,35 @@ Page({
 
   _closeWS () {
     console.log('join')
-    wx.closeSocket()
-    wx.onSocketClose(function(res) {
-      console.log('WebSocket 已关闭！')
-    })
+    try{
+      wx.closeSocket()
+      wx.onSocketClose(function(res) {
+        console.log('WebSocket 已关闭！')
+      })
+    }catch (e){
+     console.log('WebSocket断开异常')
+    }
+  },
+
+  _handleMessage (res) {
+    console.log(res)
+    let data = res.data
+    if(data !== 'ok'){
+      try {
+        let  { signPeople, signItems } = this.data
+        data = JSON.parse(data)
+        signPeople++
+        signItems.push(data)
+        this.setData({
+          signPeople,
+          signItems
+        })
+      }catch(e){
+        wx.showToast({
+          title: '数据解析失败',
+          icon: 'none'
+        })
+      }
+    }
   }
 })

@@ -5,7 +5,7 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    user_id: {
+    userId: {
       type: String,
       value: '1234567891234'
     }
