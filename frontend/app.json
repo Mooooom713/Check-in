@@ -1,7 +1,8 @@
 {
   "pages": [
     "pages/home/home",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/home/checkin/checkin"
   ],
   "window": {
     "navigationBarBackgroundColor": "bcc0c9",

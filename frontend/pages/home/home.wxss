@@ -7,6 +7,11 @@ page {
   width: 100%;
 }
 
+.note-text {
+  margin-top: 20px;
+  text-align: center;
+}
+
 .hint {
   height: 100%;
   display: flex;

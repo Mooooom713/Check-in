@@ -83,7 +83,6 @@ Page({
     this.setData({
       postRole: role
     })
-    console.log(role)
   },
 
   _handleSaveNumber(e) {

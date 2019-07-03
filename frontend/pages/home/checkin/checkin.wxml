@@ -1,0 +1,22 @@
+<view class="info-wrap">
+  <view class="info-container">
+    <view class="block">
+      <label>倒计时：</label>
+      <text class="text">{{time}} 秒</text>
+    </view>
+    <view class="block">
+      <label>应签到人数：</label>
+      <text class="text">{{people}}</text>
+    </view>
+    <view class="block">
+      <label>实签到人数：</label>
+      <text class="text">{{signPeople}}</text>
+    </view>
+  </view>
+</view>
+<view class="title-wrap">
+  详细信息
+</view>
+<view class="">
+  <signrow></signrow>
+</view>
