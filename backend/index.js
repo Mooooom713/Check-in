@@ -41,6 +41,7 @@ handleDisconnection();
 const wss = new webSocket.Server({ server });
 var clients = [];
 var teacherWs = null;
+var successor = [];
 var latitude = null;
 var longitude = null;
 var course_id = null;
@@ -52,6 +53,10 @@ wss.on('connection', function connection(ws) {
     ws.on('close', function close() {
         if (teacherWs && ws === teacherWs) {
             teacherWs = null;
+            course_id = null;
+            latitude = null;
+            longitude = null;
+            successor = [];
         }
         clients = clients.filter(function (item) {
             return item !== ws;
@@ -66,9 +71,17 @@ wss.on('connection', function connection(ws) {
             course_id = message.course_id;
             latitude = message.latitude;
             longitude = message.longitude;
+            ws.send('ok');
         } else if (message.role === 'student') {
             if (!course_id || message.course_id !== course_id) {
                 ws.send('no');
+                return;
+            }
+            var bHasSigned = successor.filter(function (item) {
+                return item === message.user_id;
+            }).length === 0 ? false : true;
+            if (bHasSigned) {
+                ws.send('duplicate');
                 return;
             }
             // 判断经纬度是否在有限距离内 如果在则推送给老师
@@ -77,6 +90,7 @@ wss.on('connection', function connection(ws) {
                     user_id: message.user_id,
                     user_name: user_name
                 }))
+                successor.push(message.user_id);
             }
         } else {
             ws.send('invalid data');

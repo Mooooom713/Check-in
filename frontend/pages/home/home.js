@@ -43,14 +43,14 @@ Page({
 
   onShow: function () {
     if (app.globalData.userInfo) {
-     this._getClassInfo(app.globalData.userInfo)
+      this._getClassInfo(app.globalData.userInfo)
     }
   },
 
-  _getClassInfo (data) {
+  _getClassInfo(data) {
     const { user_id, role } = data
     wx.request({
-      url:`https://zwtbis.applinzi.com/myCourse?user_id=${user_id}&role=${role}`,
+      url: `https://zwtbis.applinzi.com/myCourse?user_id=${user_id}&role=${role}`,
       method: 'GET',
       success: (res) => {
         this.setData({
@@ -67,22 +67,87 @@ Page({
   },
 
   _handleSignIn(e) {
-    const {  role } =app.globalData.userInfo
-    app.globalData.classInfo = e.detail
-    console.log(app.globalData)
-    if(role === 'teacher'){
+    const { role } = app.globalData.userInfo;
+    app.globalData.classInfo = e.detail;
+    if (role === 'teacher') {
       this.setData({
         noteText: '确认上传位置信息？'
       })
-      this.Modal.showModal()
+      this.Modal.showModal();
+    } else if (role === 'student') {
+      this.handleStudentSignIn(role);
     }
   },
 
-  _cancelEvent () {
+  handleStudentSignIn(role) {
+    const { user_id, user_name } = app.globalData.userInfo;
+    const { course_id } = app.globalData.classInfo;
+    wx.getLocation({
+      success: (res) => {
+        const latitude = res.latitude
+        const longitude = res.longitude
+        const studentSignInInfo = { role, user_id, user_name, course_id, latitude, longitude };
+        this.snedWs(JSON.stringify(studentSignInInfo));
+      },
+      fail: function (e) {
+        wx.showToast({
+          title: '无法获取位置信息',
+          icon: 'none'
+        })
+      }
+    })
+  },
+
+  snedWs(studentSignInInfo) {
+    let socketTask = wx.connectSocket({
+      url: 'wss://zwtbis.applinzi.com',
+      header: {
+        'content-type': 'application/json'
+      },
+      protocols: ['protocol1'],
+      method: "GET"
+    })
+
+    socketTask.onOpen(function () {
+      socketTask.send({
+        data: studentSignInInfo,
+        fail: function () {
+          wx.showToast({
+            title: '无法获取位置信息',
+            icon: 'none'
+          })
+        }
+      })
+    })
+
+    socketTask.onMessage(function (res) {
+      if (res.data === "invalid data") {
+        console.log("无效数据");
+      } else if (res.data === "no") {
+        wx.showToast({
+          title: '这节课还未发起签到',
+          icon: 'none'
+        })
+      } else if (res.data === "duplicate") {
+        wx.showToast({
+          title: '你已经签到过了',
+          icon: 'none'
+        })
+      } else {
+        wx.showToast({
+          title: '签到成功',
+          icon: 'success'
+        })
+      }
+      socketTask.close();
+    })
+  },
+
+  _cancelEvent() {
     this.Modal.hideModal()
   },
 
-  _confirmEvent () {
+  _confirmEvent() {
     wx.navigateTo({
       url: '/pages/home/checkin/checkin'
     })
