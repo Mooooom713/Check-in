@@ -47,6 +47,10 @@ Page({
     }
   },
 
+  onHide: function () {
+    this.Modal.hideModal()
+  },
+
   _getClassInfo(data) {
     const { user_id, role } = data
     wx.request({

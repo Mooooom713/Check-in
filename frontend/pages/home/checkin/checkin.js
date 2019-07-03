@@ -5,7 +5,8 @@ Page({
     time: 60,
     people: 0,
     signPeople: 0,
-    signItems: []
+    signItems: [],
+    isClose: false
   },
 
   onLoad: function () {
@@ -53,27 +54,27 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    try{
-      wx.closeSocket()
-      wx.onSocketClose(function(res) {
-        console.log('WebSocket 已关闭！')
-      })
-    } catch (e) {
-      console.log(e)
-    }
+    this._handleNavBack()
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    try{
-      wx.closeSocket()
-      wx.onSocketClose(function(res) {
-        console.log('WebSocket 已关闭！')
-      })
-    } catch (e) {
-      console.log(e)
+    this._handleNavBack()
+  },
+
+  _handleNavBack () {
+    const  { isClose } = this.data
+    if(!isClose){
+      try{
+        wx.closeSocket()
+        wx.onSocketClose(function(res) {
+          console.log('WebSocket 已关闭！')
+        })
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
 
@@ -112,6 +113,9 @@ Page({
       wx.closeSocket()
       wx.onSocketClose(function(res) {
         console.log('WebSocket 已关闭！')
+        this.setData({
+          isClose: true
+        })
       })
     }catch (e){
      console.log('WebSocket断开异常')
