@@ -18,5 +18,8 @@
   详细信息
 </view>
 <view class="">
-  <signrow></signrow>
+  <signrow
+    wx:for="{{signItems}}"
+    wx:key="{{index}}"
+    userId="{{item.user_id}}"></signrow>
 </view>

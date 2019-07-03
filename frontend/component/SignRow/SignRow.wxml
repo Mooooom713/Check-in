@@ -5,7 +5,7 @@
       <text class="text">学号：</text>
     </view>
     <view class="row-right">
-      {{user_id}}
+      {{userId}}
     </view>
   </view>
 </view>
